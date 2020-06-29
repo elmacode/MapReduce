@@ -91,6 +91,24 @@ public class Static {
       return (s.hashCode() == Integer.MIN_VALUE) ? 0 : Math.abs(s.hashCode());
   }
 
+  public static void writeArray(ArrayList<Integer> wordsNumbers, String filename) throws IOException {
+		BufferedWriter writer = null;
+    
+        try {
+		  writer = new BufferedWriter(new FileWriter(filename));
+		  for(int i=0;i<wordsNumbers.size();i++){
+			writer.write(Integer.toString(wordsNumbers.get(i))+",");
+		  }
+          
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        finally {
+          writer.close();
+        }
+        
+    }
+
     public static void showResult(HashMap<String, Integer> results){
 
       ArrayList<String> resultLines = new ArrayList<String>(); 
@@ -98,7 +116,7 @@ public class Static {
         .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder()))
         .forEach(entry -> {
           resultLines.add(entry.getKey() + " " + entry.getValue() + "\n");
-          System.out.println(entry.getKey() + " " + entry.getValue());
+          //System.out.println(entry.getKey() + " " + entry.getValue());
           });
    
           BufferedWriter saveResults = null;

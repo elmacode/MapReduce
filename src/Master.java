@@ -224,52 +224,141 @@ public class Master {
         String input = args[0];
         
         
-        long startTime, endTime, splitTime, mapTime, shuffleTime, reduceTime;
+        Long startTime, endTime, splitTime, mapTime, shuffleTime, reduceTime, globalStart, globalEnd, globalTime;  
         
+
+        /**
+         * Performance phase
+         * 
+         * ArrayList<Integer> globalTimes = new ArrayList<Integer>();
+        ArrayList<Integer> splitTimes = new ArrayList<Integer>();
+        ArrayList<Integer> mapTimes = new ArrayList<Integer>();
+        ArrayList<Integer> shuffleTimes = new ArrayList<Integer>();
+        ArrayList<Integer> reduceTimes = new ArrayList<Integer>();
+
+
+        File corpusDir = new File("sequential/corpus/");
+        String[] texts = corpusDir.list();
+        
+        //little corpus
+        // String[] texts = new String[1];
+        // texts[0]="sante_publique.txt";
+        // // texts[1]="securite_sociale.txt";
+        // // texts[0]="rural_peche_maritime.txt";
+
+		for(String text : texts){
+            globalStart = System.currentTimeMillis();
+            Master master = new Master(); 
+
+            System.out.println("********************************************************");
+            System.out.println("Start spliting with " + master.machinesAvailable.size() + " machines..." );
+            System.out.println("********************************************************");
+            startTime = System.currentTimeMillis();
+            master.split("sequential/corpus/"+text);
+            endTime = System.currentTimeMillis();
+            System.out.println("SPLIT FINISHED");
+            splitTime = endTime - startTime;
+            splitTimes.add(splitTime.intValue());
+            
+            
+            System.out.println("********************************************************");
+            System.out.println("Start mapping ..." );
+            System.out.println("********************************************************");
+            startTime = System.currentTimeMillis();
+            master.map();
+            endTime = System.currentTimeMillis();
+            System.out.println("MAP FINISHED");
+            mapTime = endTime - startTime;
+            mapTimes.add(mapTime.intValue());
+
+            System.out.println("********************************************************");
+            System.out.println("Start shuffling ..." );
+            System.out.println("********************************************************");
+            startTime = System.currentTimeMillis();
+            master.suffle();
+            endTime = System.currentTimeMillis();
+            System.out.println("SHUFFLE FINISHED");
+            shuffleTime = endTime - startTime;
+            shuffleTimes.add(shuffleTime.intValue());
+            
+
+            System.out.println("********************************************************");
+            System.out.println("Start reducing ..." );
+            System.out.println("********************************************************");
+            startTime = System.currentTimeMillis();
+            master.reduce();
+            endTime = System.currentTimeMillis();
+            System.out.println("REDUCE FINISHED");
+            reduceTime = endTime - startTime;
+            reduceTimes.add(reduceTime.intValue());
+
+            System.out.println("********************************************************");
+            System.out.println("Results !" );
+            System.out.println("********************************************************");
+            master.printResults();
+            globalEnd = System.currentTimeMillis();
+            globalTime = globalEnd-globalStart;
+            globalTimes.add(globalTime.intValue());
+        }
+
+        Static.writeArray(globalTimes, "TempsGlobal");
+        Static.writeArray(splitTimes, "TempsSplit");
+        Static.writeArray(mapTimes, "TempsMap");
+        Static.writeArray(shuffleTimes, "TempsShuffle");
+        Static.writeArray(reduceTimes, "TempsReduce");
+         */
+
+        globalStart = System.currentTimeMillis();
         Master master = new Master(); 
 
         System.out.println("********************************************************");
-		System.out.println("Start spliting with " + master.machinesAvailable.size() + " machines..." );
-		System.out.println("********************************************************");
+        System.out.println("Start spliting with " + master.machinesAvailable.size() + " machines..." );
+        System.out.println("********************************************************");
         startTime = System.currentTimeMillis();
         master.split(input);
         endTime = System.currentTimeMillis();
         System.out.println("SPLIT FINISHED");
-		splitTime = endTime - startTime;
+        splitTime = endTime - startTime;
         
         
         System.out.println("********************************************************");
-		System.out.println("Start mapping ..." );
-		System.out.println("********************************************************");
+        System.out.println("Start mapping ..." );
+        System.out.println("********************************************************");
         startTime = System.currentTimeMillis();
         master.map();
         endTime = System.currentTimeMillis();
         System.out.println("MAP FINISHED");
         mapTime = endTime - startTime;
+        
 
         System.out.println("********************************************************");
-		System.out.println("Start shuffling ..." );
-		System.out.println("********************************************************");
+        System.out.println("Start shuffling ..." );
+        System.out.println("********************************************************");
         startTime = System.currentTimeMillis();
         master.suffle();
         endTime = System.currentTimeMillis();
         System.out.println("SHUFFLE FINISHED");
         shuffleTime = endTime - startTime;
         
+        
 
         System.out.println("********************************************************");
-		System.out.println("Start reducing ..." );
-		System.out.println("********************************************************");
+        System.out.println("Start reducing ..." );
+        System.out.println("********************************************************");
         startTime = System.currentTimeMillis();
         master.reduce();
         endTime = System.currentTimeMillis();
         System.out.println("REDUCE FINISHED");
         reduceTime = endTime - startTime;
+        
 
         System.out.println("********************************************************");
         System.out.println("Results !" );
         System.out.println("********************************************************");
         master.printResults();
+        globalEnd = System.currentTimeMillis();
+        globalTime = globalEnd-globalStart;
+        
         
         
 
@@ -279,7 +368,9 @@ public class Master {
 		System.out.println("Time to split: " + splitTime + "ms");
 		System.out.println("Time to map: " + mapTime + "ms");
 		System.out.println("Time to shuffle: " + shuffleTime + "ms");
-		System.out.println("Time to reduce: " + reduceTime + "ms");
+        System.out.println("Time to reduce: " + reduceTime + "ms");
+        System.out.println("Global time: " + globalTime + "ms");
+        System.out.println("TO SEE THE RESULTS: cat results");
     
         
 		

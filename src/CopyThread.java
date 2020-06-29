@@ -16,7 +16,7 @@ public class CopyThread extends Thread {
 
     public void createDirectory() {
 
-        System.out.println("CopyThread running: creating directory");
+        System.out.println("CopyThread running: creating directory then copy");
         try {
             ProcessBuilder pb = new ProcessBuilder("ssh", Static.USERNAME + "@" + machine, "mkdir", "-p", this.destDir);
             pb.redirectErrorStream(true);
@@ -31,7 +31,7 @@ public class CopyThread extends Thread {
     }
 
     public void copyFile(){
-        System.out.println("CopyThread running: copying file");
+        // System.out.println("CopyThread running: copying file");
         // BufferedReader out = null;
         try {
             ProcessBuilder pb = new ProcessBuilder("scp", "-p", filename,
