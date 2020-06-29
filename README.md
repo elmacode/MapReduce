@@ -4,7 +4,7 @@ SLR207 Télécom Paris
 # Manuel d'utilisation 
 
 **Configurer le nombre de machine**
-Editer le fichier machines.txt etm metter s'y les mahcines que vous voulez.
+Editer le fichier machines.txt et metter s'y les mahcines que vous voulez.
 Vous pouvez vous aider du fichier allMachines.txt.
 
 **Pour lancer le programme**
@@ -14,7 +14,9 @@ ant run -Dinput=forestier_mayotte.txt
 ```
 
 **Pour nettoyer les répertoires**
+```bash
 ant Clean
+```
 
 
 
