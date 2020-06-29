@@ -20,14 +20,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Master {
 
     private ArrayList<String> machinesAvailable;
-    private int machinesNumber;
     private boolean full;
     
 
-    public Master(int machinesNumber, boolean full) throws IOException {
-        this.full = full;
-        this.machinesNumber = machinesNumber;
-
+    public Master() throws Exception {
+        
         // Static.SELECTEDMACHINES are a set of machines that were previously tested to
         // connect
         // in ssh with deplot. All machines are avaiable
@@ -36,14 +33,12 @@ public class Master {
 
         this.machinesAvailable = new ArrayList<String>();
         String machine;
+
         while ((machine = machinesPath.readLine()) != null) {
             this.machinesAvailable.add(machine);
 
         }
-        machinesPath.close();
-
-        if (this.full)
-            this.machinesNumber = this.machinesAvailable.size();
+        machinesPath.close();        
 
     }
 
@@ -58,13 +53,13 @@ public class Master {
         long inputLength = inputFile.length();
         // System.out.println(inputLength);
 
-        long splitLength = inputLength / this.machinesNumber;
+        long splitLength = inputLength / this.machinesAvailable.size();
         // System.out.println(splitLength);
 
         long splitCurr = 1;
         long splitEnd = splitLength;
 
-        for (int i = 0; i < this.machinesNumber; i++) {
+        for (int i = 0; i < this.machinesAvailable.size(); i++) {
             String splitName = "src/splits/S" + i + ".txt";
             RandomAccessFile split = new RandomAccessFile(splitName, "rw");
             char c = ' ';
@@ -110,7 +105,7 @@ public class Master {
     public void map() throws InterruptedException {
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
-        for (int i = 0; i < this.machinesNumber; i++) {
+        for (int i = 0; i < this.machinesAvailable.size(); i++) {
             String machine = this.machinesAvailable.get(i);
             String splitPath = "/tmp/" + Static.USERNAME + "/splits/S" + i + ".txt";
 
@@ -126,7 +121,7 @@ public class Master {
 
     public void preSuffle() throws InterruptedException {
         ArrayList<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < this.machinesNumber; i++) {
+        for (int i = 0; i < this.machinesAvailable.size(); i++) {
             String machine = this.machinesAvailable.get(i);
 
             String destDir = "/tmp/" + Static.USERNAME + "/";
@@ -145,7 +140,7 @@ public class Master {
         preSuffle();
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
-        for (int i = 0; i < this.machinesNumber; i++) {
+        for (int i = 0; i < this.machinesAvailable.size(); i++) {
             String machine = this.machinesAvailable.get(i);
             String mapPath = "/tmp/" + Static.USERNAME + "/maps/UM" + i + ".txt";
 
@@ -163,7 +158,8 @@ public class Master {
     public void reduce() throws IOException, InterruptedException {
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
-        for (String machine : this.machinesAvailable) {
+        for (int i = 0; i < this.machinesAvailable.size(); i++) {
+            String machine = this.machinesAvailable.get(i);
             ExecuteSlave execSlave = new ExecuteSlave(machine, 2);
             threads.add(execSlave);
             execSlave.start();
@@ -181,7 +177,8 @@ public class Master {
             Static.createDirectory("/results");
             
 
-            for(String machine : this.machinesAvailable){
+            for (int i = 0; i < this.machinesAvailable.size(); i++) {
+                String machine = this.machinesAvailable.get(i);
                 String dirPath = "/tmp/"+Static.USERNAME+"/reduces";
                 String destDirPath = "/tmp/"+Static.USERNAME+"/results" ;
                 FileThread copyReduces = new FileThread(machine,dirPath,destDirPath);
@@ -225,15 +222,11 @@ public class Master {
     public static void main(String[] args) throws Exception {
        
         String input = args[0];
-        int machinesNumber = Integer.parseInt(args[1]);
-        boolean full = false;
-        if(machinesNumber==0){
-            full = true;
-        }
+        
         
         long startTime, endTime, splitTime, mapTime, shuffleTime, reduceTime;
         
-        Master master = new Master(machinesNumber,full); 
+        Master master = new Master(); 
 
         System.out.println("********************************************************");
 		System.out.println("Start spliting with " + master.machinesAvailable.size() + " machines..." );

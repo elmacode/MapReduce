@@ -21,14 +21,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Deploy {
     
     private Object[] machinesAvailable;
-    private int machinesNumber;
-    private boolean full;
 
 
-    public Deploy(int machinesNumber,boolean full){
+
+    public Deploy(){
         this.machinesAvailable = null;
-        this.machinesNumber = machinesNumber;
-        this.full = full;
     }
 
 
@@ -66,8 +63,6 @@ public class Deploy {
 
             br.close();
             //System.out.println(this.machinesAvailable.size());
-            if(full)
-                this.machinesNumber = this.machinesAvailable.length;
             
             
         } catch (Exception e) {
@@ -126,12 +121,7 @@ public class Deploy {
 
         ArrayList<Thread> threads = new ArrayList<Thread>();
         
-
-        if(this.machinesAvailable.length<machinesNumber)
-            throw new Exception("Not enough available machines");
-
-
-        for (int i = 0; i < this.machinesNumber; i++) {
+        for (int i = 0; i < this.machinesAvailable.length; i++) {
 
             String machine = (String) this.machinesAvailable[i];
             Static.writeMachines(machine);
@@ -149,15 +139,8 @@ public class Deploy {
     }
 
     public static void main(String[] args) throws Exception {
-       
-
-        int machinesNumber = Integer.parseInt(args[0]);
-        boolean full = false;
-        if(machinesNumber==0){
-            full = true;
-        }
-
-        Deploy deploy = new Deploy(machinesNumber,full); 
+        
+        Deploy deploy = new Deploy(); 
         deploy.testConnection("machines.txt");
         deploy.deploySlave();
 

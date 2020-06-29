@@ -29,7 +29,6 @@
     <target name="Deploy" depends="Clean" >
         <java classname="Deploy" fork="true">
             <classpath refid="class.path"/>
-            <arg value="${machinesNumber}"/>
         </java>
         
     </target>
@@ -38,7 +37,6 @@
         <java classname="Master" fork="true">
             <classpath refid="class.path"/>
             <arg value="${input}"/>
-            <arg value="${machinesNumber}"/>
         </java>
         
     </target>
