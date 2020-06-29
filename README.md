@@ -1,5 +1,5 @@
 # MapReduce
-SLR207 Télécom Paris 
+SLR207 - Télécom Paris - El Mahdi Blinda
 
 # Manuel d'utilisation 
 
