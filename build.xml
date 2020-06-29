@@ -1,0 +1,52 @@
+ <project name="MapReduce" default="run" basedir=".">
+    
+    <!-- to be reused -->
+    <property name="src" location="src"/> 
+    <property name="bin" location="bin"/> 
+    <!-- <property name="lib" location="lib"/>  -->
+
+
+    <!-- create our ant classpath using the fileset task -->
+    <!-- the classpath contains all the class the program needs in order to run -->
+    <path id="class.path">
+        <pathelement path="${bin}"/>
+    </path>
+
+    <target name="compile">
+        <delete dir="bin"/>
+        <mkdir dir="bin"/>
+        <javac includeantruntime="false" srcdir="src" destdir="bin"/>
+    </target>
+
+    <target name="Clean" depends="compile" >
+        <java classname="Clean" fork="true">
+        <classpath refid="class.path"/>
+        </java>
+        
+    </target>
+
+    <!-- dir="${src}" -->
+    <target name="Deploy" depends="Clean" >
+        <java classname="Deploy" fork="true">
+            <classpath refid="class.path"/>
+            <arg value="${machinesNumber}"/>
+        </java>
+        
+    </target>
+
+    <target name="run" depends="Deploy">
+        <java classname="Master" fork="true">
+            <classpath refid="class.path"/>
+            <arg value="${input}"/>
+            <arg value="${machinesNumber}"/>
+        </java>
+        
+    </target>
+
+    <!-- ant -Dmessage="Salut" run -->
+
+    <!-- javac -d bin src/*.java -->
+    <!-- java -classpath bin Client "Salut" -->
+
+
+</project>
