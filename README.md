@@ -7,6 +7,9 @@ SLR207 - Télécom Paris - El Mahdi Blinda
 Editer le fichier machines.txt et metter s'y les mahcines que vous voulez.
 Vous pouvez vous aider du fichier allMachines.txt.
 
+**Configurer le nom d'utilisateur**
+Se rendre dans le fichier src/Static.java et modifier la variable USERNAME.
+
 **Pour lancer le programme**
 Mettre le nom du texte que vous voulez à la place de forestier_mayotte.txt
 ```bash
